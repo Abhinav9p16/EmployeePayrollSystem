@@ -4,6 +4,7 @@ import org.junit.*;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 
 public class TestPayroll {
     PayRoll p;
@@ -61,6 +62,25 @@ public class TestPayroll {
         Instant end = Instant.now();
         System.out.println("Duration Without Thread: " + Duration.between(start, end));
         Assert.assertEquals(count + 2, p.readData().size());
+        p.cascadingDelete("Abhinav");
+        p.cascadingDelete("Arpit");
+    }
+    @Test
+    public void givenEmployeePayrollInDB_Should_AddMultipleEmployees_WithThread(){
+        p = PayRoll.getInstance();
+        ArrayList<Employee> arr = new ArrayList<>();
+        int count = p.readData().size();
+        System.out.println(count);
+        Instant start = Instant.now();
+        Employee e1 = new Employee("Capgemini", "Sales", "Abhinav", "67890", "ABCDE", 'M', 60000);
+        Employee e2 = new Employee("VMC", "Illuminati", "Arpit", "54321", "hijkl", 'M', 40000);
+        arr.add(e1);
+        arr.add(e2);
+        p.addEmployeesWithThread(arr);
+        Instant end = Instant.now();
+        System.out.println("Duration With Thread: " + Duration.between(start, end));
+        Assert.assertEquals(count + 2, p.readData().size());
+        System.out.println(p.readData().size());
         p.cascadingDelete("Abhinav");
         p.cascadingDelete("Arpit");
     }
