@@ -4,10 +4,10 @@ import java.sql.*;
 import java.util.*;
 
 public class PayRoll {
-    static ConnectionRetriever con = new ConnectionRetriever();
+    ConnectionRetriever con = new ConnectionRetriever();
 
-    public static List<Employee> readData() {
-        String sql = "select * from employee;";
+    public List<Employee> readData() {
+        String sql = "select * from employee e, payroll p where e.emp_id=p.emp_id ;";
         List<Employee> arr = new ArrayList<Employee>();
         try {
             Connection c = con.getConnection();
@@ -21,6 +21,7 @@ public class PayRoll {
                 e.phone = result.getString("phone");
                 e.address = result.getString("address");
                 e.gender = result.getString("gender").charAt(0);
+                e.basic_pay = result.getInt("basic_pay");
                 arr.add(e);
             }
         } catch (SQLException throwables) {
@@ -28,11 +29,18 @@ public class PayRoll {
         }
         return arr;
     }
+    public void update(String name,int salary)
+    {
+        try {
 
-    public static void main(String[] args) {
-        List<Employee> ar = readData();
-        for (Employee e : ar) {
-            System.out.println(e);
+            String sql = "update payroll set basic_pay= " + salary + " where emp_id=" + "(select emp_id from employee where name = '" + name + "');";
+            Connection c = con.getConnection();
+            Statement statement = c.createStatement();
+            statement.executeUpdate(sql);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }
