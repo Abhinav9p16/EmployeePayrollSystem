@@ -43,6 +43,23 @@ public class PayRoll {
         return arr;
     }
 
+    public int getBetween(int start, int end) {
+        int count = 0;
+        Connection c = con.getConnection();
+        try {
+            payrollUpdateStatement = c.prepareStatement("select * from employee where emp_id between ? and ?");
+            payrollUpdateStatement.setInt(1, start);
+            payrollUpdateStatement.setInt(2, end);
+            ResultSet result = payrollUpdateStatement.executeQuery();
+            while (result.next()) {
+                count++;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return count;
+    }
+
     public void update(String name, int salary) {
         try {
             Connection c = con.getConnection();

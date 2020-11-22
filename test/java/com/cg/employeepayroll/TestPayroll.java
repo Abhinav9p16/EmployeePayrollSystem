@@ -17,4 +17,9 @@ public class TestPayroll {
         p.update("a", 200000);
         Assert.assertEquals(200000, p.readData().get(0).basic_pay);
     }
+    @Test
+    public void givenEmployeePayrollInDB_WhenRetrieved_Should_CountEmployeeInGivenRange(){
+        p = PayRoll.getInstance();
+        Assert.assertEquals(3, p.getBetween(1, 3));
+    }
 }
