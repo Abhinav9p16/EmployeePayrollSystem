@@ -127,6 +127,34 @@ public class PayRoll {
         }
     }
 
+    public void cascadingDelete(String name) {
+        try {
+            Connection c = con.getConnection();
+            int id = 0;
+            payrollUpdateStatement = c.prepareStatement("select emp_id from employee where name=?");
+            payrollUpdateStatement.setString(1, name);
+            ResultSet result1 = payrollUpdateStatement.executeQuery();
+            while (result1.next()) {
+                id = result1.getInt(1);
+                break;
+            }
+            //Clear Payroll table
+            payrollUpdateStatement = c.prepareStatement("delete from payroll where emp_id=?");
+            payrollUpdateStatement.setInt(1, id);
+            payrollUpdateStatement.executeUpdate();
+            //Clear Employee_Department table
+            payrollUpdateStatement = c.prepareStatement("delete from employee_department where emp_id=?");
+            payrollUpdateStatement.setInt(1, id);
+            payrollUpdateStatement.executeUpdate();
+            //Clear Employee_table
+            payrollUpdateStatement = c.prepareStatement("delete from employee where emp_id=?");
+            payrollUpdateStatement.setInt(1, id);
+            payrollUpdateStatement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     public void update(String name, int salary) {
         try {
             Connection c = con.getConnection();

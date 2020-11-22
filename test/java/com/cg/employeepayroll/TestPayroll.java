@@ -31,12 +31,19 @@ public class TestPayroll {
     }
 
     @Test
-    public void givenSqlQueryWhenExecuted_Should_Commit() {
+    public void givenSqlQueryWhenExecuted_Should_InsertEmployeeToDB() {
         p = PayRoll.getInstance();
         int count = p.readData().size();
         Employee emp = new Employee("Capgemini", "Sales", "Abhinav", "67890", "ABCDE", 'F', 60000);
         p.createEmployee(emp);
         Assert.assertEquals(count + 1, p.readData().size());
 
+    }
+    @Test
+    public void givenSqlQueryWhenExecuted_Should_DeleteEmployeeFromDB(){
+        p = PayRoll.getInstance();
+        int count = p.readData().size();
+        p.cascadingDelete("Abhinav");
+        Assert.assertEquals(count - 1, p.readData().size());
     }
 }
