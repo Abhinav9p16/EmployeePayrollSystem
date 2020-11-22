@@ -4,6 +4,18 @@ import java.sql.*;
 import java.util.*;
 
 public class PayRoll {
+    private PayRoll() {
+    }
+
+    private static PayRoll pinstance = null;
+
+    public static PayRoll getInstance() {
+        if (pinstance == null)
+            pinstance = new PayRoll();
+
+        return pinstance;
+    }
+
     ConnectionRetriever con = new ConnectionRetriever();
     PreparedStatement payrollUpdateStatement;
 
