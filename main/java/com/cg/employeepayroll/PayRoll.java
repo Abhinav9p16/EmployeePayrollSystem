@@ -181,4 +181,20 @@ public class PayRoll {
         }
         return count;
     }
+
+    public void addEmployeesWithThread(ArrayList<Employee> employeeList) {
+        System.out.println("addEmployeesWithThread");
+        for (Employee e : employeeList) {
+            Runnable task = () -> {
+                createEmployee(e);
+            };
+            Thread thread = new Thread(task);
+            thread.start();
+            try {
+                thread.sleep(150);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        }
+    }
 }
