@@ -22,4 +22,9 @@ public class TestPayroll {
         p = PayRoll.getInstance();
         Assert.assertEquals(3, p.getBetween(1, 3));
     }
+    @Test
+    public void givenEmpoloyeePayrollInDB_WhenRetrieved_Should_CountEmployeesByGender(){
+        p=PayRoll.getInstance();
+        Assert.assertEquals(1,p.getSum());
+    }
 }
