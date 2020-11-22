@@ -197,4 +197,22 @@ public class PayRoll {
             }
         }
     }
+
+    public void updateSalaryWithThread(String[] name, int[] salary) {
+        System.out.println("updateSalaryWithThread");
+        for (int i = 0; i < name.length; i++) {
+            String n = name[i];
+            int s = salary[i];
+            Runnable task = () -> {
+                update(n, s);
+            };
+            Thread thread = new Thread(task);
+            thread.start();
+            try {
+                thread.sleep(10000);
+            } catch (InterruptedException interruptedException) {
+                interruptedException.printStackTrace();
+            }
+        }
+    }
 }

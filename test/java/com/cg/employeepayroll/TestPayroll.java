@@ -84,4 +84,12 @@ public class TestPayroll {
         p.cascadingDelete("Abhinav");
         p.cascadingDelete("Arpit");
     }
+    @Test
+    public void givenEmployeePayrollInDB_Should_UpdateEmployeeDetails_WithThread(){
+        p = PayRoll.getInstance();
+        String[] name = {"a", "b", "c"};
+        int[] salary = {10000, 20000, 30000};
+        p.updateSalaryWithThread(name, salary);
+        Assert.assertEquals(10000, p.readData().get(0).basic_pay);
+    }
 }
