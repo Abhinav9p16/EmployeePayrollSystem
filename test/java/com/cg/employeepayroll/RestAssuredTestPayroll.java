@@ -1,4 +1,5 @@
 package com.cg.employeepayroll;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -28,13 +29,41 @@ public class RestAssuredTestPayroll {
         Response employeeList = getEmployeeList();
         System.out.println("string is " + employeeList.asString());
     }
+
     @Test
-    public void checkPostMethodInJsonServer(){
+    public void checkPostMethodInJsonServer() {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
                 .body("{\"name\":\"xyz\",\"salary\":\"8000\"}")
                 .when().post("/employees/create");
         Assert.assertEquals(201, response.getStatusCode());
+    }
+
+    @Test
+    public void checkPostMethodInJsonServerForMultipleEmployeesUsingThread() {
+        String[] name = {"Abhinav", "Arpit", "Prajwal"};
+        String[] salary = {"1000", "2000", "3000"};
+
+        for (int i = 0; i < 3; i++) {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("name", name[i]);
+            map.put("salary", salary[i]);
+            Runnable task = () -> {
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .accept(ContentType.JSON)
+                        .body(map)
+                        .when().post("/employees/create");
+            };
+            Thread t = new Thread(task);
+            t.start();
+            try {
+                t.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }
