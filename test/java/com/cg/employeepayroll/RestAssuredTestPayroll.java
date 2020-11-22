@@ -66,4 +66,19 @@ public class RestAssuredTestPayroll {
         }
 
     }
+    @Test
+    public void givenEmployeeDetailsInJsonServer_WhenUpdated_ShouldCommit(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("{\"name\":\"abc\",\"salary\":\"700000\"}")
+                .when()
+                .put("/employees/update/" + empId)
+                .then()
+                .body("id", Matchers.any(Integer.class))
+                .body("name", Matchers.is("abc"))
+                .body("salary", Matchers.is("700000"));
+
+    }
+
 }
