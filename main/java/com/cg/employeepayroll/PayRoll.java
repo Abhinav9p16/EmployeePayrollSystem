@@ -5,6 +5,7 @@ import java.util.*;
 
 public class PayRoll {
     ConnectionRetriever con = new ConnectionRetriever();
+    PreparedStatement payrollUpdateStatement;
 
     public List<Employee> readData() {
         String sql = "select * from employee e, payroll p where e.emp_id=p.emp_id ;";
@@ -29,17 +30,15 @@ public class PayRoll {
         }
         return arr;
     }
-    public void update(String name,int salary)
-    {
-        try {
 
-            String sql = "update payroll set basic_pay= " + salary + " where emp_id=" + "(select emp_id from employee where name = '" + name + "');";
+    public void update(String name, int salary) {
+        try {
             Connection c = con.getConnection();
-            Statement statement = c.createStatement();
-            statement.executeUpdate(sql);
-        }
-        catch (Exception e)
-        {
+            payrollUpdateStatement = c.prepareStatement("update payroll set basic_pay= ? where emp_id=(select emp_id from employee where name = ?);");
+            payrollUpdateStatement.setInt(1, salary);
+            payrollUpdateStatement.setString(2, name);
+            payrollUpdateStatement.executeUpdate();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
