@@ -1,5 +1,6 @@
 package com.cg.employeepayroll;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.hamcrest.*;
 import org.junit.*;
@@ -26,5 +27,14 @@ public class RestAssuredTestPayroll {
     public void ListEmployee() {
         Response employeeList = getEmployeeList();
         System.out.println("string is " + employeeList.asString());
+    }
+    @Test
+    public void checkPostMethodInJsonServer(){
+        Response response = RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body("{\"name\":\"xyz\",\"salary\":\"8000\"}")
+                .when().post("/employees/create");
+        Assert.assertEquals(201, response.getStatusCode());
     }
 }
