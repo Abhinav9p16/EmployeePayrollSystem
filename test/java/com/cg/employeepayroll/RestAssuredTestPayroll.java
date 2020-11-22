@@ -66,8 +66,9 @@ public class RestAssuredTestPayroll {
         }
 
     }
+
     @Test
-    public void givenEmployeeDetailsInJsonServer_WhenUpdated_ShouldCommit(){
+    public void givenEmployeeDetailsInJsonServer_WhenUpdated_ShouldCommit() {
         RestAssured.given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
@@ -78,6 +79,14 @@ public class RestAssuredTestPayroll {
                 .body("id", Matchers.any(Integer.class))
                 .body("name", Matchers.is("abc"))
                 .body("salary", Matchers.is("700000"));
+
+    }
+
+    @Test
+    public void givenEmployeeDetailsInJsonServer_WhenDeleted_ShouldCommit() {
+        int id = 1;
+        Response response = RestAssured.delete("/employees/delete/" + id);
+        Assert.assertEquals(200, response.getStatusCode());
 
     }
 
